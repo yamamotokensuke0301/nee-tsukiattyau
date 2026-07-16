@@ -1,0 +1,861 @@
+:root {
+  color-scheme: light;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Noto Sans JP", sans-serif;
+  --ink: #26333a;
+  --ink-soft: #65747a;
+  --paper: #fffdf8;
+  --cream: #f7eee3;
+  --navy: #273d54;
+  --navy-deep: #182a3c;
+  --coral: #ef795f;
+  --coral-deep: #d75a46;
+  --sun: #ffd487;
+  --shadow: 0 24px 70px rgba(32, 51, 57, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: var(--ink);
+  background: #d8e6dd;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.015);
+  transition:
+    opacity 500ms ease,
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    visibility 0s linear 700ms;
+}
+
+.screen.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  transition-delay: 0s;
+}
+
+.title-screen {
+  place-items: center;
+  overflow: hidden;
+  background: #fff;
+}
+
+.title-screen::after {
+  display: none;
+}
+
+.title-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.title-sun {
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: clamp(90px, 15vw, 210px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 214, 138, 0.82);
+  box-shadow: 0 0 90px rgba(255, 199, 91, 0.5);
+}
+
+.title-cloud {
+  position: absolute;
+  width: 250px;
+  height: 44px;
+  border-radius: 100%;
+  opacity: 0.62;
+  background: rgba(255, 255, 255, 0.82);
+  filter: blur(1px);
+  animation: cloud-drift 18s ease-in-out infinite alternate;
+}
+
+.title-cloud::before,
+.title-cloud::after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  background: inherit;
+}
+
+.title-cloud::before {
+  left: 46px;
+  bottom: 8px;
+  width: 86px;
+  height: 72px;
+}
+
+.title-cloud::after {
+  right: 44px;
+  bottom: 5px;
+  width: 105px;
+  height: 86px;
+}
+
+.title-cloud-one {
+  top: 20%;
+  left: -3%;
+}
+
+.title-cloud-two {
+  top: 8%;
+  left: 36%;
+  transform: scale(0.64);
+  animation-delay: -6s;
+}
+
+.title-mountain {
+  position: absolute;
+  right: -8%;
+  bottom: -23%;
+  width: 76%;
+  height: 70%;
+  transform: rotate(7deg);
+  border-radius: 50% 50% 0 0;
+  background: #6f9985;
+  clip-path: polygon(0 74%, 18% 48%, 29% 62%, 48% 22%, 67% 56%, 81% 38%, 100% 69%, 100% 100%, 0 100%);
+}
+
+.title-mountain-back {
+  right: 24%;
+  bottom: -11%;
+  width: 88%;
+  opacity: 0.55;
+  background: #8fb19c;
+}
+
+.title-mountain-front {
+  filter: drop-shadow(0 -12px 20px rgba(59, 95, 78, 0.12));
+}
+
+.title-road {
+  position: absolute;
+  right: 10%;
+  bottom: -20%;
+  width: 15%;
+  height: 83%;
+  transform: perspective(500px) rotate(16deg) rotateX(56deg);
+  border-radius: 50% 50% 0 0;
+  opacity: 0.72;
+  background: linear-gradient(90deg, #c3b6a1, #e3d5bd 50%, #bdad96);
+}
+
+.title-content {
+  width: min(90vw, 980px);
+  padding: clamp(30px, 6vw, 80px);
+  text-align: center;
+}
+
+.title-kicker,
+.ending-kicker {
+  margin: 0 0 18px;
+  color: var(--coral-deep);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.66rem, 1.3vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+}
+
+.game-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  color: var(--navy-deep);
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(2.8rem, 7vw, 6.6rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.075em;
+  text-shadow: none;
+}
+
+.game-title span:nth-child(2) {
+  margin-left: 0;
+}
+
+.game-title .title-question {
+  margin-top: 0.25em;
+  margin-left: 0;
+  color: var(--coral-deep);
+  font-size: 0.7em;
+  letter-spacing: -0.06em;
+}
+
+.title-copy {
+  margin: clamp(24px, 4vw, 44px) 0 28px 0.2em;
+  color: #53676e;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  letter-spacing: 0.16em;
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-width: 190px;
+  padding: 15px 24px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  background: var(--navy);
+  box-shadow: 0 12px 24px rgba(37, 60, 81, 0.22);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  background: #31506c;
+  box-shadow: 0 16px 30px rgba(37, 60, 81, 0.28);
+}
+
+.primary-button:active {
+  transform: translateY(1px);
+}
+
+.primary-button.title-button {
+  min-width: 0;
+  margin-top: clamp(44px, 8vw, 76px);
+  padding: 9px 2px;
+  border-bottom: 1px solid rgba(39, 61, 84, 0.38);
+  border-radius: 0;
+  color: var(--navy);
+  background: transparent;
+  box-shadow: none;
+}
+
+.primary-button.title-button:hover {
+  color: var(--coral-deep);
+  background: transparent;
+  box-shadow: none;
+}
+
+.title-credit {
+  position: absolute;
+  right: 28px;
+  bottom: 22px;
+  margin: 0;
+  color: rgba(34, 54, 65, 0.56);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  writing-mode: vertical-rl;
+}
+
+.game-screen {
+  grid-template-rows: auto 1fr;
+  padding: clamp(12px, 2vw, 26px);
+  background:
+    radial-gradient(circle at 14% 15%, rgba(255, 255, 255, 0.9), transparent 26%),
+    linear-gradient(135deg, #dce9df 0%, #f5ead9 100%);
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 0 2px clamp(10px, 1.6vw, 18px);
+}
+
+.mini-title,
+.turn-counter {
+  margin: 0;
+}
+
+.mini-title {
+  color: var(--navy-deep);
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(0.76rem, 1.4vw, 0.98rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.turn-counter {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.game-stage {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
+  width: min(100%, 1120px);
+  min-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 28px;
+  background: rgba(255, 253, 248, 0.78);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.scene-frame {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #bbc9c0;
+}
+
+.scene-backdrop {
+  position: absolute;
+  inset: -28px;
+  opacity: 0.38;
+  background-image: var(--scene-image, url("./assets/heroine-01.jpg"));
+  background-position: center;
+  background-size: cover;
+  filter: blur(24px) saturate(0.8);
+  transform: scale(1.12);
+  transition: opacity 180ms ease;
+}
+
+.heroine-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(0.92) contrast(1.015);
+  transition:
+    opacity 180ms ease,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 420ms ease;
+}
+
+.scene-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 72%, rgba(21, 37, 49, 0.18));
+}
+
+.scene-frame.is-changing .heroine-image,
+.scene-frame.is-changing .scene-backdrop {
+  opacity: 0;
+}
+
+.scene-frame.is-changing .heroine-image {
+  transform: scale(1.025);
+  filter: saturate(0.72) blur(2px);
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: clamp(24px, 4vw, 54px);
+  background:
+    linear-gradient(rgba(255, 253, 248, 0.92), rgba(255, 253, 248, 0.92)),
+    repeating-linear-gradient(0deg, transparent 0 25px, rgba(62, 93, 105, 0.06) 25px 26px);
+}
+
+.speaker-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.player-echo {
+  align-self: flex-end;
+  max-width: 84%;
+  margin-bottom: clamp(18px, 3vw, 34px);
+  padding: 13px 18px;
+  border-radius: 18px 18px 4px 18px;
+  color: #fff;
+  background: var(--navy);
+  box-shadow: 0 10px 24px rgba(39, 61, 84, 0.16);
+  animation: bubble-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.player-echo .speaker-label {
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.player-echo p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(0.9rem, 1.7vw, 1.05rem);
+  line-height: 1.6;
+}
+
+.dialogue-card {
+  position: relative;
+  margin-top: auto;
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid rgba(60, 82, 91, 0.1);
+  border-radius: 4px 24px 24px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 45px rgba(51, 69, 76, 0.11);
+}
+
+.heroine-label {
+  color: var(--coral-deep);
+}
+
+.heroine-line {
+  min-height: 1.6em;
+  margin: 0;
+  color: var(--ink);
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+.dialogue-caret {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border-right: 2px solid rgba(239, 121, 95, 0.65);
+  border-bottom: 2px solid rgba(239, 121, 95, 0.65);
+  animation: caret 1.4s ease-in-out infinite;
+}
+
+.dialogue-card.is-speaking {
+  animation: dialogue-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.choice-panel {
+  margin-top: 20px;
+  animation: choice-in 440ms 120ms both cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.choice-prompt {
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.choice-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.choice-button {
+  padding: 14px 18px;
+  border: 1px solid rgba(39, 61, 84, 0.18);
+  border-radius: 15px;
+  color: var(--navy-deep);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.choice-button:hover {
+  transform: translateY(-2px);
+}
+
+.choice-yes:hover,
+.choice-yes:focus-visible {
+  border-color: var(--coral);
+  color: #fff;
+  background: var(--coral);
+}
+
+.choice-no:hover,
+.choice-no:focus-visible {
+  border-color: var(--navy);
+  color: #fff;
+  background: var(--navy);
+}
+
+.speech-form {
+  margin-top: 22px;
+}
+
+.input-label {
+  display: block;
+  margin: 0 0 8px 2px;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.input-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 15px 17px;
+  border: 1px solid rgba(39, 61, 84, 0.16);
+  border-radius: 15px;
+  outline: none;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.input-row input::placeholder {
+  color: #a2aaa9;
+}
+
+.input-row input:focus {
+  border-color: rgba(239, 121, 95, 0.7);
+  box-shadow: 0 0 0 4px rgba(239, 121, 95, 0.11);
+}
+
+.speech-form.has-error .input-row input {
+  border-color: var(--coral);
+  animation: input-shake 260ms ease;
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  background: var(--navy);
+  box-shadow: 0 8px 16px rgba(39, 61, 84, 0.16);
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.send-button:hover {
+  transform: translateY(-1px);
+  background: #31506c;
+}
+
+.send-button:disabled,
+.input-row input:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.input-hint {
+  margin: 8px 0 0 2px;
+  color: #929c9e;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+}
+
+.ending-screen {
+  place-items: center;
+  overflow: hidden;
+  color: var(--ink);
+  background: #fff;
+}
+
+.ending-credit {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  color: #202428;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(0.9rem, 2vw, 1.12rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1.8;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, -140%);
+  will-change: top, transform, opacity;
+}
+
+.ending-credit.is-scrolling {
+  animation: ending-credit-scroll var(--ending-credit-duration, 175.968s) linear forwards;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(239, 121, 95, 0.72);
+  outline-offset: 3px;
+}
+
+@keyframes cloud-drift {
+  to {
+    transform: translateX(32px);
+  }
+}
+
+@keyframes ending-credit-scroll {
+  0% {
+    top: 0;
+    opacity: 0;
+    transform: translate(-50%, -140%);
+  }
+
+  4% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+    transform: translate(-50%, 40%);
+  }
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
+@keyframes dialogue-in {
+  0% {
+    opacity: 0.45;
+    transform: translateY(5px);
+  }
+}
+
+@keyframes choice-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes caret {
+  50% {
+    transform: translateY(4px) rotate(45deg);
+    opacity: 0.35;
+  }
+}
+
+@keyframes input-shake {
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@media (max-width: 760px) {
+  .title-content {
+    width: 100%;
+    padding: 26px;
+  }
+
+  .game-title {
+    font-size: clamp(3.1rem, 17vw, 5.7rem);
+  }
+
+  .game-title .title-question {
+    margin-left: 0;
+    font-size: 0.46em;
+  }
+
+  .title-cloud-two {
+    display: none;
+  }
+
+  .title-mountain {
+    right: -26%;
+    width: 120%;
+  }
+
+  .title-mountain-back {
+    right: 8%;
+  }
+
+  .game-screen {
+    padding: 10px;
+  }
+
+  .game-header {
+    padding: 0 2px 8px;
+  }
+
+  .game-stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 52%) minmax(0, 48%);
+    height: 100%;
+    border-radius: 20px;
+  }
+
+  .scene-frame {
+    border-bottom: 1px solid rgba(32, 51, 57, 0.08);
+  }
+
+  .conversation {
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .player-echo {
+    margin-bottom: 10px;
+    padding: 9px 13px;
+  }
+
+  .dialogue-card {
+    padding: 14px 16px;
+    border-radius: 3px 17px 17px;
+  }
+
+  .heroine-line {
+    font-size: clamp(1.08rem, 5vw, 1.35rem);
+  }
+
+  .dialogue-caret {
+    right: 15px;
+    bottom: 12px;
+  }
+
+  .choice-panel,
+  .speech-form {
+    margin-top: 12px;
+  }
+
+  .choice-button,
+  .input-row input {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .send-button {
+    padding: 0 15px;
+  }
+
+  .send-button span:first-child {
+    display: none;
+  }
+
+  .input-hint {
+    display: none;
+  }
+}
+
+@media (max-height: 660px) and (orientation: landscape) {
+  .game-screen {
+    padding: 8px 12px;
+  }
+
+  .game-stage {
+    grid-template-columns: minmax(220px, 0.8fr) minmax(360px, 1.2fr);
+  }
+
+  .conversation {
+    padding: 18px 28px;
+  }
+
+  .player-echo {
+    margin-bottom: 10px;
+    padding: 8px 13px;
+  }
+
+  .dialogue-card {
+    padding: 14px 18px;
+  }
+
+  .choice-panel,
+  .speech-form {
+    margin-top: 10px;
+  }
+
+  .input-hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

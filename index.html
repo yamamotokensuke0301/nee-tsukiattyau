@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="言葉を入力するたびに、彼女との夏が少しずつ動くミニ恋愛シミュレーションゲーム。"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>ねぇ、私たち付き合っちゃう？</title>
+    <link rel="preload" as="image" href="./assets/heroine-01.jpg" />
+    <link rel="stylesheet" href="./styles.css?v=20260716-cinematic-credit1" />
+  </head>
+  <body>
+    <main class="app" aria-label="ねぇ、私たち付き合っちゃう？">
+      <section id="title-screen" class="screen title-screen is-active" aria-labelledby="game-title">
+        <div class="title-content">
+          <h1 id="game-title" class="game-title">
+            <span>ねぇ、</span>
+            <span class="title-question">私たち付き合っちゃう？</span>
+          </h1>
+          <button id="start-button" class="primary-button title-button" type="button">はじめる</button>
+        </div>
+      </section>
+
+      <section id="game-screen" class="screen game-screen" aria-label="会話画面" aria-hidden="true">
+        <header class="game-header">
+          <p class="mini-title">ねぇ、私たち付き合っちゃう？</p>
+          <p id="turn-counter" class="turn-counter">ことば 0</p>
+        </header>
+
+        <div class="game-stage">
+          <figure id="scene-frame" class="scene-frame">
+            <div class="scene-backdrop" aria-hidden="true"></div>
+            <img
+              id="heroine-image"
+              class="heroine-image"
+              src="./assets/heroine-01.jpg"
+              alt="山あいの道で微笑む少女"
+              width="360"
+              height="450"
+            />
+            <div class="scene-wash" aria-hidden="true"></div>
+          </figure>
+
+          <section class="conversation" aria-label="会話">
+            <div id="player-echo" class="player-echo" aria-live="polite" hidden>
+              <span class="speaker-label">あなた</span>
+              <p id="player-line"></p>
+            </div>
+
+            <div id="heroine-dialogue" class="dialogue-card" aria-live="polite">
+              <span class="speaker-label heroine-label">彼女</span>
+              <p id="heroine-line" class="heroine-line">ニシシ はじめまして</p>
+              <span class="dialogue-caret" aria-hidden="true"></span>
+            </div>
+
+            <div id="choice-panel" class="choice-panel" hidden>
+              <p class="choice-prompt">あなたの答えは？</p>
+              <div class="choice-buttons">
+                <button id="yes-button" class="choice-button choice-yes" type="button">はい</button>
+                <button id="no-button" class="choice-button choice-no" type="button">いいえ</button>
+              </div>
+            </div>
+
+            <form id="speech-form" class="speech-form" autocomplete="off">
+              <label for="speech-input" class="input-label">あなたのセリフ</label>
+              <div class="input-row">
+                <input
+                  id="speech-input"
+                  name="speech"
+                  type="text"
+                  maxlength="120"
+                  placeholder="彼女に話しかける…"
+                  enterkeyhint="send"
+                  aria-describedby="input-hint"
+                />
+                <button id="send-button" class="send-button" type="submit" aria-label="セリフを送る">
+                  <span>話す</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              <p id="input-hint" class="input-hint">好きな言葉を自由に入力できます</p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section id="ending-screen" class="screen ending-screen" aria-label="エンディング" aria-hidden="true">
+        <p id="ending-credit" class="ending-credit">製作者：空希 香蕉（そらき ばなな）</p>
+      </section>
+    </main>
+
+    <audio id="ending-audio" src="./assets/ending-theme.mp3" preload="auto"></audio>
+    <script src="./game.js?v=20260716-cinematic-credit1"></script>
+  </body>
+</html>
